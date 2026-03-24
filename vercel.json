@@ -4,14 +4,6 @@
     {
       "src": "server/server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "client/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "admin/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -21,18 +13,11 @@
     },
     {
       "src": "/admin/(.*)",
-      "dest": "admin/$1"
-    },
-    {
-      "src": "/(index.html|gallery.html|contact.html)?",
-      "dest": "client/$1"
+      "dest": "/admin/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "client/$1"
+      "dest": "/client/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
