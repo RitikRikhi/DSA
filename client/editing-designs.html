@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editing & Designs - DSA Media Crew</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/lightbox.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f0eb;
+            --red: #c8102e;
+            --gold: #b8a06a;
+            --grey: #1e1e1e;
+            --mid: #3a3a3a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 4rem;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(184, 160, 106, 0.15);
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.15em;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-logo span {
+            color: var(--red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(245, 240, 235, 0.6);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            color: rgba(245, 240, 235, 0.3);
+            text-transform: uppercase;
+        }
+
+        .page-header {
+            padding: 10rem 4rem 6rem;
+            background: radial-gradient(ellipse at 70% 40%, rgba(200, 16, 46, 0.15) 0%, transparent 60%), var(--black);
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 4rem;
+            width: 100px;
+            height: 2px;
+            background: var(--red);
+        }
+
+        .page-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-eyebrow::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 0.85;
+            letter-spacing: 0.02em;
+        }
+
+        .page-title span {
+            color: var(--red);
+        }
+
+        .page-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            color: rgba(245, 240, 235, 0.6);
+            margin-top: 2rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* VIDEO GRID SECTION */
+        .video-section {
+            padding: 6rem 4rem 8rem;
+            background: var(--black);
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: rgba(184, 160, 106, 0.4);
+            margin-bottom: 4rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(184, 160, 106, 0.1);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .video-item {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: var(--grey);
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(245, 240, 235, 0.05);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .video-item:hover {
+            border-color: rgba(200, 16, 46, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+            filter: grayscale(20%) brightness(0.8);
+        }
+
+        .video-item:hover .video-thumbnail {
+            transform: scale(1.05);
+            filter: grayscale(0%) brightness(1);
+        }
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.9) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2.5rem;
+            transition: background 0.3s;
+        }
+
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 80px;
+            height: 80px;
+            background: rgba(200, 16, 46, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 2;
+        }
+
+        .video-play-btn svg {
+            width: 30px;
+            fill: var(--white);
+            margin-left: 5px;
+        }
+
+        .video-item:hover .video-play-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .video-info {
+            transform: translateY(10px);
+            transition: transform 0.4s ease;
+        }
+
+        .video-item:hover .video-info {
+            transform: translateY(0);
+        }
+
+        .video-category {
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 0.5rem;
+        }
+
+        .video-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .video-year {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            color: rgba(245, 240, 235, 0.4);
+            margin-top: 0.5rem;
+        }
+
+        /* LIGHTBOX / MODAL */
+        .video-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .video-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1200px;
+            aspect-ratio: 16/9;
+            background: #000;
+            position: relative;
+            box-shadow: 0 0 100px rgba(200, 16, 46, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--red);
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        footer {
+            background: #050505;
+            border-top: 1px solid rgba(184, 160, 106, 0.1);
+            padding: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.15em;
+            color: rgba(245, 240, 235, 0.4);
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: rgba(245, 240, 235, 0.2);
+            letter-spacing: 0.08em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .footer-links a {
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(245, 240, 235, 0.3);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 1024px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header,
+            .video-section,
+            footer {
+                padding: 6rem 2rem;
+            }
+
+            .page-header::after {
+                left: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="home.html" class="nav-logo"><span style="color:var(--red)">DSA</span><span style="color:var(--gold);margin:0 2px">·</span>MEDIA CREW</a>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="home.html#about">About</a></li>
+            <li><a href="home.html#services">Services</a></li>
+            <li><a href="gallery.html">Photography</a></li>
+            <li><a href="videography-aftermovies.html">Videography</a></li>
+            <li><a href="editing-designs.html" style="color:var(--gold)">Editing & Designs</a></li>
+            <li><a href="home.html#contact">Contact</a></li>
+        </ul>
+        <span class="nav-tag">Premium Media · Est. 2020</span>
+    </nav>
+
+    <header class="page-header">
+        <div class="page-eyebrow">Creative Post-Production</div>
+        <h1 class="page-title">EDITING<br>& <span>DESIGNS</span></h1>
+        <p class="page-subtitle">Refining visual narratives through expert editing, motion graphics, and creative design aesthetics.</p>
+    </header>
+
+    <section class="video-section">
+        <div class="section-label">Featured Edits</div>
+
+        <div class="video-grid" id="editingVideoGrid">
+            <!-- Videos will be injected here by editing-logic.js -->
+        </div>
+    </section>
+
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">Close — Esc</span>
+            <div id="videoContainer" style="width:100%;height:100%;">
+                <!-- Video or Iframe will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">DSA MEDIA CREW</div>
+        <div class="footer-copy">© 2024 DSA Media Crew. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="home.html">Home</a>
+            <a href="gallery.html">Photography</a>
+            <a href="videography-aftermovies.html">Videography</a>
+            <a href="editing-designs.html">Editing & Designs</a>
+        </div>
+    </footer>
+
+    <script src="js/notifications.js"></script>
+    <script src="js/lightbox.js"></script>
+    <script src="js/video-modal.js"></script>
+    <script src="js/editing-logic.js"></script>
+
+</body>
+
+</html>

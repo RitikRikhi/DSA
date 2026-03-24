@@ -1,0 +1,51 @@
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Project specific ignores
+all_campus_photos.txt
+current_downloads.txt
+photos_to_add.txt
+debug_dir.js
+seedReels.js
+import_editing_images.js
+import_editing_media.js
+remove_editing_videos.js
+remove_specific_videos.js
+scripts/
+
+# Large media files (exceeding GitHub/Vercel limits)
+poetry.mp4
+100.6604.MOV
+*.mov
+*.MOV
+*.mp4
+*.MP4
+*.mkv
+*.MKV

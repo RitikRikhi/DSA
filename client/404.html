@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | DSA Media Crew</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f0eb;
+      --red: #c8102e;
+      --gold: #b8a06a;
+      --grey: #1e1e1e;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 4rem;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184, 160, 106, 0.15);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.15em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--red);
+    }
+
+    /* 404 CONTENT */
+    .error-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .error-bg-text {
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 30vw;
+      color: rgba(245, 240, 235, 0.03);
+      z-index: 0;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .error-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .error-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(6rem, 15vw, 12rem);
+      line-height: 1;
+      color: var(--red);
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .error-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      color: var(--gold);
+      margin-bottom: 3rem;
+      letter-spacing: 0.02em;
+    }
+
+    .error-desc {
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      color: rgba(245, 240, 235, 0.6);
+      line-height: 1.6;
+      letter-spacing: 0.05em;
+    }
+
+    .return-btn {
+      display: inline-block;
+      background: rgba(200, 16, 46, 0.8);
+      color: var(--white);
+      border: 1px solid var(--gold);
+      padding: 1.2rem 3.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(5px);
+    }
+
+    .return-btn:hover {
+      background: var(--red);
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(200, 16, 46, 0.4);
+    }
+
+    /* GRID OVERLAY */
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(184, 160, 106, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184, 160, 106, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 2rem;
+      }
+      .return-btn {
+        padding: 1rem 2rem;
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="home.html" class="nav-logo">DSA MEDIA<span> CREW</span></a>
+  </nav>
+
+  <main class="error-container">
+    <div class="grid-overlay"></div>
+    <div class="error-bg-text">404</div>
+    
+    <div class="error-content">
+      <h1 class="error-title">404</h1>
+      <h2 class="error-subtitle">SCENE NOT FOUND</h2>
+      <p class="error-desc">
+        The frame you're looking for doesn't seem to exist in our reel. 
+        It might have been cut in the edit or moved to another location.
+      </p>
+      <a href="home.html" class="return-btn">RETURN TO EXPERIENCE</a>
+    </div>
+  </main>
+</body>
+
+</html>

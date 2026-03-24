@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STUDIO CONTROL — DSA MEDIA</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050505;
+      --card: rgba(255, 255, 255, 0.03);
+      --card-hover: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.08);
+      --red: #e63222;
+      --red-glow: rgba(230, 50, 34, 0.3);
+      --text: #f5f2ed;
+      --muted: #8a8478;
+      --display: 'Bebas Neue', cursive;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+    }
+
+    /* Mesh Gradient BG */
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(at 0% 0%, #151515 0px, transparent 50%),
+        radial-gradient(at 100% 100%, #1a0a0a 0px, transparent 50%),
+        radial-gradient(at 50% 50%, #101010 0px, transparent 50%);
+      opacity: 0.6;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* SIDE NAVIGATION */
+    .sidebar {
+      width: 280px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 100;
+      padding: 40px 0;
+    }
+
+    .logo-container {
+      padding: 0 40px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-main {
+      font-family: var(--display);
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: 2px;
+    }
+
+    .logo-main span {
+      color: var(--red);
+    }
+
+    .ops-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--muted);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--red);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--red);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .nav-links {
+      flex: 1;
+      padding: 40px 20px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 20px;
+      color: var(--muted);
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      border-radius: 2px;
+      margin-bottom: 5px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: var(--text);
+      background: var(--card);
+    }
+
+    .nav-item.active {
+      border-left: 2px solid var(--red);
+    }
+
+    .sidebar-footer {
+      padding: 0 40px;
+    }
+
+    .logout-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--red);
+      text-decoration: none;
+      letter-spacing: 2px;
+      opacity: 0.6;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      opacity: 1;
+    }
+
+    /* MAIN CONTENT */
+    .main {
+      margin-left: 280px;
+      flex: 1;
+      padding: 60px 80px;
+      max-width: 1400px;
+    }
+
+    .top-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 60px;
+    }
+
+    .greeting-title {
+      font-family: var(--display);
+      font-size: 82px;
+      line-height: 0.9;
+    }
+
+    .greeting-sub {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 5px;
+      color: var(--muted);
+      margin-top: 15px;
+      text-transform: uppercase;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 30px;
+      border-radius: 4px;
+      transition: all 0.4s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--red);
+      background: var(--card-hover);
+      transform: translateY(-5px);
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .stat-value {
+      font-family: var(--display);
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    /* CREATIVE DROP (UPLOAD) */
+    .creative-drop {
+      background: var(--card);
+      border: 1px dashed var(--border);
+      padding: 60px;
+      border-radius: 4px;
+      margin-bottom: 80px;
+      text-align: center;
+      transition: all 0.4s;
+      position: relative;
+    }
+
+    .creative-drop:hover {
+      border-color: var(--red);
+      background: rgba(230, 50, 34, 0.02);
+    }
+
+    .drop-title {
+      font-family: var(--display);
+      font-size: 32px;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .drop-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+    }
+
+    .upload-form-premium {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-wrapper label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .premium-input {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      padding: 15px 20px;
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 14px;
+      border-radius: 2px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .premium-input:focus {
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .file-input-wrapper {
+      grid-column: span 2;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border);
+      padding: 30px;
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      transition: all 0.3s;
+    }
+
+    .file-input-wrapper:hover {
+      border-color: var(--red);
+      color: var(--text);
+    }
+
+    .ignite-btn {
+      grid-column: span 2;
+      padding: 20px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      font-family: var(--display);
+      font-size: 24px;
+      letter-spacing: 4px;
+      cursor: pointer;
+      transition: all 0.4s;
+      border-radius: 2px;
+      margin-top: 10px;
+    }
+
+    .ignite-btn:hover {
+      background: #ff3e2e;
+      box-shadow: 0 0 30px var(--red-glow);
+      letter-spacing: 8px;
+    }
+
+    /* STUDIO GALLERY */
+    .studio-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .media-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .media-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--red);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .media-preview {
+      width: 100%;
+      height: 220px;
+      background: #111;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .media-preview img,
+    .media-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s;
+    }
+
+    .media-card:hover .media-preview img,
+    .media-card:hover .media-preview video {
+      transform: scale(1.05);
+    }
+
+    .media-info {
+      padding: 25px;
+    }
+
+    .media-title {
+      font-family: var(--display);
+      font-size: 24px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .media-meta {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .media-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .action-btn {
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+
+    .action-btn:hover {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .action-btn.del:hover {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+
+    #uploadStatus {
+      margin-top: 20px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-mesh"></div>
+  <div class="noise"></div>
+
+  <aside class="sidebar">
+    <div class="logo-container">
+      <div class="logo-main">DSA<span>MEDIA</span></div>
+      <div class="ops-tag">
+        <div class="status-dot"></div> STUDIO OPS ACTIVE
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="/admin/dashboard.html" class="nav-item active">● Dashboard</a>
+      <a href="#" class="nav-item" onclick="notImplemented('Archives')">○ Archives</a>
+      <a href="#" class="nav-item" onclick="notImplemented('Metrics')">○ Metrics</a>
+      <a href="#" class="nav-item" onclick="notImplemented('Team')">○ Team Access</a>
+      <a href="#" class="nav-item" onclick="notImplemented('System')">○ System Settings</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="#" onclick="logout()" class="logout-btn">TERMINATE CONNECTION</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-strip">
+      <div>
+        <div class="greeting-sub">Authenticated Session // Feb 26, 2026</div>
+        <h1 class="greeting-title">STUDIO<br>CONTROL</h1>
+      </div>
+      <div style="text-align: right">
+        <div class="greeting-sub" style="margin-top: 0; margin-bottom: 10px;">Current Reach</div>
+        <div style="font-family: var(--display); font-size: 32px;">482K+</div>
+      </div>
+    </div>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-label">Production Assets</div>
+        <div class="stat-value" id="totalPhotos">--</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Live Captures</div>
+        <div class="stat-value" id="thisWeek">--</div>
+      </div>
+      <div class="stat-card" style="border-color: var(--red);">
+        <div class="stat-label" style="color: var(--red);">Engagement Index</div>
+        <div class="stat-value">94.2%</div>
+      </div>
+    </div>
+
+    <div class="creative-drop">
+      <div class="drop-title">CREATIVE DROP</div>
+      <div class="drop-sub">Release new media assets to the public gallery</div>
+
+      <form id="uploadForm" class="upload-form-premium">
+        <div class="input-wrapper">
+          <label>Media Title</label>
+          <input type="text" id="title" class="premium-input" placeholder="Enter Asset Title" required>
+        </div>
+        <div class="input-wrapper">
+          <label>Categorization</label>
+          <select id="category" class="premium-input">
+            <option value="photography">Photography</option>
+            <option value="videography">Videography</option>
+            <option value="cultural">Cultural Fest</option>
+            <option value="sports">Sports</option>
+            <option value="events">Events</option>
+            <option value="portraits">Portraits</option>
+            <option value="campus">Campus Life</option>
+          </select>
+        </div>
+        <div class="input-wrapper" style="grid-column: span 2;">
+          <label>Payload (JPG / MP4)</label>
+          <div class="file-input-wrapper" onclick="document.getElementById('image').click()">
+            <span id="fileNameDisplay">TAP TO SELECT MEDIA FILE</span>
+            <input type="file" id="image" accept="image/*,video/*" style="display: none;" required>
+          </div>
+        </div>
+        <button type="submit" class="ignite-btn" id="uploadBtn">IGNITE UPLOAD</button>
+      </form>
+      <div id="uploadStatus"></div>
+    </div>
+
+    <div class="top-strip" style="margin-bottom: 40px;">
+      <h2 style="font-family: var(--display); font-size: 42px;">ASSET LIBRARY</h2>
+      <span style="font-family: var(--mono); font-size: 11px; cursor: pointer; color: var(--red); letter-spacing: 2px;"
+        onclick="loadPhotos()">↻ RELOAD SYSTEM</span>
+    </div>
+
+    <div id="photoList" class="studio-gallery">
+      <!-- Media Items Injection -->
+    </div>
+  </main>
+
+  <body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo-block">
+        <div class="logo-eyebrow">Media Crew Portal</div>
+        <div class="logo-main">DSA</div>
+        <div class="logo-sub">MEDIA</div>
+        <div class="live-badge">
+          <div class="live-dot"></div>LIVE OPS
+        </div>
+      </div>
+
+      <nav class="nav">
+        <div class="nav-section">Content</div>
+        <a href="/admin/dashboard.html" class="nav-item active"><span class="nav-icon">⬛</span> Overview</a>
+        <a href="#" class="nav-item" onclick="notImplemented('Posts')"><span class="nav-icon">📸</span> Posts <span
+            class="n-count">38</span></a>
+        <a href="#" class="nav-item" onclick="notImplemented('Videos')"><span class="nav-icon">🎬</span> Videos <span
+            class="n-count">12</span></a>
+        <a href="#" class="nav-item" onclick="notImplemented('Schedule')"><span class="nav-icon">🗓️</span> Schedule</a>
+        <a href="#" class="nav-item" onclick="notImplemented('Assets')"><span class="nav-icon">📁</span> Assets</a>
+
+        <div class="nav-section">Community</div>
+        <a href="#" class="nav-item" onclick="notImplemented('Comments')"><span class="nav-icon">💬</span> Comments
+          <span class="n-count hot">24</span></a>
+        <a href="#" class="nav-item" onclick="notImplemented('Reposts')"><span class="nav-icon">🔁</span> Reposts</a>
+        <a href="#" class="nav-item" onclick="notImplemented('Announcements')"><span class="nav-icon">📢</span>
+          Announcements</a>
+
+        <div class="nav-section">Crew</div>
+        <a href="#" class="nav-item" onclick="notImplemented('Members')"><span class="nav-icon">👥</span> Members</a>
+        <a href="#" class="nav-item" onclick="notImplemented('Tasks')"><span class="nav-icon">✅</span> Tasks <span
+            class="n-count hot">5</span></a>
+        <a href="#" class="nav-item" onclick="notImplemented('Settings')"><span class="nav-icon">⚙️</span> Settings</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="crew-member" onclick="logout()">
+          <div class="avatar-img">ZK</div>
+          <div class="crew-info">
+            <div class="crew-name">Admin</div>
+            <div class="crew-role">// Logout</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- TICKER HEADER -->
+      <div class="header-banner">
+        <div class="ticker">
+          <div class="ticker-label">BREAKING</div>
+          <div class="ticker-text">Reel dropped 2hrs ago — 42K views · Collab pitch from @streetstudio pending review ·
+            New gear arrived: Canon R5 + DJI OM7 · Next shoot: SAT 3PM at DSA Studio</div>
+        </div>
+        <div class="header-right">
+          <button class="hdr-btn" onclick="notImplemented('Drafts')">📥 Drafts (3)</button>
+          <button class="hdr-btn primary" onclick="document.getElementById('title').focus()">+ New Post</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- HERO -->
+        <div class="hero-row">
+          <div>
+            <div class="page-kicker">// Admin Dashboard</div>
+            <div class="page-heading">CREW<br>CONTROL</div>
+            <div class="page-sub">FEB 26, 2026 · WEEK 09 · ALL SYSTEMS GO</div>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-outline" onclick="notImplemented('Export')">↓ Export Report</button>
+            <button class="btn btn-primary" onclick="notImplemented('Calendar')">📅 View Calendar</button>
+          </div>
+        </div>
+
+        <!-- STATS STRIP -->
+        <div class="stats-row">
+          <div class="stat-cell" data-index="01">
+            <div class="stat-label">Total Photos</div>
+            <div class="stat-num" id="totalPhotos">0</div>
+            <div class="stat-delta" style="color:var(--muted)">→ Managed content</div>
+          </div>
+          <div class="stat-cell" data-index="02">
+            <div class="stat-label">This Week</div>
+            <div class="stat-num red" id="thisWeek">0</div>
+            <div class="stat-delta up">↑ New uploads</div>
+          </div>
+          <div class="stat-cell" data-index="03">
+            <div class="stat-label">Total Reach</div>
+            <div class="stat-num">284K</div>
+            <div class="stat-delta up">↑ 18.2% this week</div>
+          </div>
+          <div class="stat-cell" data-index="04">
+            <div class="stat-label">Engagements</div>
+            <div class="stat-num">47.3K</div>
+            <div class="stat-delta up">↑ 9.4% this week</div>
+          </div>
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="main-grid">
+
+          <!-- PHOTOS CARD -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">MEDIA GALLERY</div>
+              <span class="card-action" onclick="loadPhotos()">↻ Refresh</span>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section">
+              <form id="uploadForm" class="upload-form">
+                <div class="upload-field" style="flex: 2;">
+                  <label>Photo Title</label>
+                  <input type="text" id="title" placeholder="Enter photo title..." required>
+                </div>
+                <div class="upload-field">
+                  <label>Select Image</label>
+                  <input type="file" id="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="upload-btn">UPLOAD</button>
+              </form>
+              <p id="uploadMsg" class="upload-msg"></p>
+            </div>
+
+            <!-- Photo Grid -->
+            <div id="photoList" class="photo-grid">
+              <div class="empty-state">
+                <div class="empty-icon">📷</div>
+                <div class="empty-text">Loading photos...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COL -->
+          <div class="side-col">
+
+            <!-- CREW ONLINE -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">CREW</div>
+                <span class="card-action">Manage</span>
+              </div>
+              <div class="crew-list">
+                <div class="crew-row"
+                  style="display:flex; align-items:center; gap:10px; padding:12px 20px; border-bottom:1px solid var(--border);">
+                  <div class="crew-av"
+                    style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#e63222,#ff8c00);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;color:#fff;">
+                    ZK</div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">Zaid K.</div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">Media Lead</div>
+                  </div>
+                  <div style="width:7px;height:7px;border-radius:50%;background:var(--green);"></div>
+                </div>
+                <div class="crew-row"
+                  style="display:flex; align-items:center; gap:10px; padding:12px 20px; border-bottom:1px solid var(--border);">
+                  <div class="crew-av"
+                    style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1a6b3c,#47c8ff);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;color:#fff;">
+                    SR</div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">Sara R.</div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">Videographer</div>
+                  </div>
+                  <div style="width:7px;height:7px;border-radius:50%;background:var(--green);"></div>
+                </div>
+                <div class="crew-row"
+                  style="display:flex; align-items:center; gap:10px; padding:12px 20px; border-bottom:1px solid var(--border);">
+                  <div class="crew-av"
+                    style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#e63222);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;color:#fff;">
+                    AM</div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">Ali M.</div>
+                    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">Photographer</div>
+                  </div>
+                  <div style="width:7px;height:7px;border-radius:50%;background:#f0a500;"></div>
+                </div>
+                <div class="crew-row"
+                  style="display:flex; align-items:center; gap:10px; padding:12px 20px; border-bottom:1px solid var(--border);">
+                  <div class="crew-av"
+                    style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#010101,#555);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;color:#fff;">
+                    <script>
+                      const token = localStorage.getItem('token');
+                      if (!token) window.location.href = '/admin/login.html';
+
+                      function logout() {
+                        localStorage.removeItem('token');
+                        window.location.href = '/admin/login.html';
+                      }
+
+                      function notImplemented(feature) {
+                        alert(`[SYSTEM]: ${feature.toUpperCase()} MODULE IS CURRENTLY OFFLINE. ENCRYPTION PENDING.`);
+                      }
+
+                      // Stylish File Input Handling
+                      const fileInput = document.getElementById('image');
+                      const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+                      fileInput.addEventListener('change', (e) => {
+                        if (e.target.files.length > 0) {
+                          fileNameDisplay.textContent = e.target.files[0].name.toUpperCase();
+                          fileNameDisplay.style.color = 'var(--red)';
+                        } else {
+                          fileNameDisplay.textContent = 'TAP TO SELECT MEDIA FILE';
+                          fileNameDisplay.style.color = 'var(--muted)';
+                        }
+                      });
+
+                      // Copy Content Link
+                      function copyLink(url) {
+                        const fullUrl = window.location.origin + url;
+                        navigator.clipboard.writeText(fullUrl).then(() => {
+                          alert('LINK SECURED TO CLIPBOARD');
+                        }).catch(() => {
+                          // Fallback
+                          const el = document.createElement('textarea');
+                          el.value = fullUrl;
+                          document.body.appendChild(el);
+                          el.select();
+                          document.execCommand('copy');
+                          document.body.removeChild(el);
+                          alert('LINK SECURED (FALLBACK MODE)');
+                        });
+                      }
+
+                      // Load Assets
+                      async function loadPhotos() {
+                        const photoList = document.getElementById('photoList');
+                        const totalPhotosEl = document.getElementById('totalPhotos');
+                        const thisWeekEl = document.getElementById('thisWeek');
+
+                        try {
+                          const res = await fetch('/api/photos');
+                          const photos = await res.json();
+
+                          if (!photos || photos.length === 0) {
+                            photoList.innerHTML = `<div style="grid-column: 1/-1; padding: 100px; text-align: center; font-family: var(--mono); color: var(--muted); letter-spacing: 4px;">NO ASSETS DETECTED IN STUDIO STORAGE</div>`;
+                            totalPhotosEl.textContent = '00';
+                            thisWeekEl.textContent = '00';
+                            return;
+                          }
+
+                          const oneWeekAgo = new Date();
+                          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                          const thisWeekCount = photos.filter(p => new Date(p.createdAt) > oneWeekAgo).length;
+
+                          totalPhotosEl.textContent = String(photos.length).padStart(2, '0');
+                          thisWeekEl.textContent = String(thisWeekCount).padStart(2, '0');
+
+                          photoList.innerHTML = photos.map(photo => {
+                            const isVideo = photo.imageUrl.toLowerCase().endsWith('.mp4') || photo.category === 'videography';
+                            return `
+            <div class="media-card">
+              <div class="media-preview">
+                ${isVideo ?
+                                `<video src="${photo.imageUrl}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>` :
+                                `<img src="${photo.imageUrl}" alt="${photo.title}" onerror="this.src='https://via.placeholder.com/400x300?text=MEDIA+OFFLINE'">`
+                              }
+              </div>
+              <div class="media-info">
+                <div class="media-title">${(photo.title || 'ARCHIVE_DATA').toUpperCase()}</div>
+                <div class="media-meta">
+                  <span>${(photo.category || 'GENERAL').toUpperCase()}</span>
+                  <span>${new Date(photo.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div class="media-actions">
+                  <button class="action-btn" onclick="copyLink('${photo.imageUrl}')">COPY LINK</button>
+                  <button class="action-btn del" onclick="deletePhoto('${photo._id}')">REMOVE</button>
+                </div>
+              </div>
+            </div>
+          `;
+                          }).join('');
+
+                        } catch (err) {
+                          photoList.innerHTML = `<div style="grid-column: 1/-1; padding: 100px; text-align: center; font-family: var(--mono); color: var(--red); letter-spacing: 4px;">[DATABASE_ERROR]: ASSET RETRIEVAL FAILED</div>`;
+                        }
+                      }
+
+                      // Upload Logic
+                      const uploadForm = document.getElementById('uploadForm');
+                      const uploadStatus = document.getElementById('uploadStatus');
+
+                      if (uploadForm) {
+                        uploadForm.addEventListener('submit', async (e) => {
+                          e.preventDefault();
+                          const title = document.getElementById('title').value;
+                          const category = document.getElementById('category').value;
+                          const image = document.getElementById('image').files[0];
+                          const uploadBtn = document.getElementById('uploadBtn');
+
+                          if (!image) {
+                            uploadStatus.innerHTML = '<span style="color: var(--red)">[ERROR]: NO PAYLOAD DETECTED</span>';
+                            return;
+                          }
+
+                          const formData = new FormData();
+                          formData.append('title', title);
+                          formData.append('category', category);
+                          formData.append('image', image);
+
+                          try {
+                            uploadBtn.disabled = true;
+                            uploadBtn.textContent = 'IGNITING...';
+                            uploadStatus.innerHTML = '<span style="color: var(--muted)">UPLOADING TO SECURE STORAGE...</span>';
+
+                            const res = await fetch('/api/photos', {
+                              method: 'POST',
+                              headers: { 'Authorization': token },
+                              body: formData
+                            });
+
+                            const data = await res.json();
+
+                            if (res.ok) {
+                              uploadStatus.innerHTML = '<span style="color: #4ade80">[SUCCESS]: ASSET LIVE ON NETWORK</span>';
+                              uploadForm.reset();
+                              fileNameDisplay.textContent = 'TAP TO SELECT MEDIA FILE';
+                              fileNameDisplay.style.color = 'var(--muted)';
+                              setTimeout(() => { uploadStatus.innerHTML = ''; }, 3000);
+                              loadPhotos();
+                            } else {
+                              uploadStatus.innerHTML = `<span style="color: var(--red)">[FAILED]: ${data.msg || 'REJECTED'}</span>`;
+                            }
+                          } catch (err) {
+                            uploadStatus.innerHTML = '<span style="color: var(--red)">[CRITICAL]: UPLINK INTERRUPTED</span>';
+                          } finally {
+                            uploadBtn.disabled = false;
+                            uploadBtn.textContent = 'IGNITE UPLOAD';
+                          }
+                        });
+                      }
+
+                      // Delete Logic
+                      async function deletePhoto(id) {
+                        if (!confirm('[WARNING]: PERMANENT DESTRUCTION OF ASSET. PROCEED?')) return;
+
+                        try {
+                          const res = await fetch(`/api/photos/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': token }
+                          });
+
+                          if (res.ok) {
+                            loadPhotos();
+                          } else {
+                            alert('[ERROR]: ASSET DELETION BLOCKED BY SYSTEM');
+                          }
+                        } catch (err) {
+                          alert('[ERROR]: CONNECTION TIMEOUT');
+                        }
+                      }
+
+                      // Init
+                      loadPhotos();
+                    </script>
+  </body>
+
+</html>

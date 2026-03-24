@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGN IN — DSA MEDIA CREW</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --red: #e63222;
+      --red-glow: rgba(230, 50, 34, 0.4);
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text: #f5f2ed;
+      --muted: #8a8478;
+      --display: 'Bebas Neue', cursive;
+      --body: 'DM Sans', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Mesh Gradient Background */
+    .mesh-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(at 0% 0%, #1a1a1a 0px, transparent 50%),
+        radial-gradient(at 100% 0%, #201010 0px, transparent 50%),
+        radial-gradient(at 100% 100%, #1a1a1a 0px, transparent 50%),
+        radial-gradient(at 0% 100%, #151515 0px, transparent 50%),
+        radial-gradient(at 50% 50%, #251010 0px, transparent 50%);
+      filter: blur(80px);
+      opacity: 0.8;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 60px 50px;
+      background: var(--glass);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--glass-border);
+      border-radius: 4px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 10;
+      animation: entrance 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes entrance {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .logo-area {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+
+    .brand {
+      font-family: var(--display);
+      font-size: 82px;
+      line-height: 0.8;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .brand span {
+      color: var(--text);
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .subtitle {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .form-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 40px 0 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .form-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .input-group input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      padding: 18px 22px;
+      border-radius: 2px;
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 14px;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    .input-group input:focus {
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 20px var(--red-glow);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 20px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-family: var(--display);
+      font-size: 20px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.4s;
+      margin-top: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:hover {
+      background: #ff3e2e;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--red-glow);
+    }
+
+    .submit-btn:disabled {
+      background: var(--muted);
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .error-box {
+      min-height: 20px;
+      margin-top: 20px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .login-nav {
+      margin-top: 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .login-nav a {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .login-nav a:hover {
+      color: var(--text);
+    }
+
+    .login-nav .back-btn {
+      margin-top: 10px;
+      color: var(--red);
+      opacity: 0.6;
+    }
+
+    .login-nav .back-btn:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="mesh-bg"></div>
+  <div class="noise"></div>
+
+  <div class="login-card">
+    <div class="logo-area">
+      <div class="eyebrow">Studio Portal</div>
+      <div class="brand">DSA<span>MEDIA</span></div>
+      <div class="subtitle">CREW ACCESS ONLY</div>
+    </div>
+
+    <div id="formTitle" class="form-title">Authentication Required</div>
+
+    <form id="authForm">
+      <div class="input-group">
+        <input type="email" id="email" placeholder="IDENTIFIER (EMAIL)" required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="SECRET KEY (PASSWORD)" required>
+      </div>
+      <button type="submit" id="submitBtn" class="submit-btn">ENTER STUDIO</button>
+    </form>
+
+    <div id="errorMsg" class="error-box"></div>
+
+    <div class="login-nav">
+      <a href="#" id="toggleAuth">Request Access Control</a>
+      <a href="/" class="back-btn">← Terminate Connection</a>
+    </div>
+  </div>
+
+  <script>
+    const authForm = document.getElementById('authForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const toggleAuth = document.getElementById('toggleAuth');
+    const formTitle = document.getElementById('formTitle');
+    const submitBtn = document.getElementById('submitBtn');
+
+    let isLogin = true;
+
+    toggleAuth.addEventListener('click', (e) => {
+      e.preventDefault();
+      isLogin = !isLogin;
+
+      if (isLogin) {
+        formTitle.textContent = 'Authentication Required';
+        submitBtn.textContent = 'ENTER STUDIO';
+        toggleAuth.textContent = 'Request Access Control';
+      } else {
+        formTitle.textContent = 'New Crew Registration';
+        submitBtn.textContent = 'CREATE IDENTITY';
+        toggleAuth.textContent = 'Return to Secure Login';
+      }
+      errorMsg.textContent = '';
+    });
+
+    if (authForm) {
+      authForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.textContent = isLogin ? 'VERIFYING...' : 'ENCRYPTING...';
+
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            localStorage.setItem('token', data.token);
+            window.location.href = '/admin/dashboard.html';
+          } else {
+            errorMsg.textContent = `[ACCESS_DENIED]: ${data.msg || 'FAILED'}`;
+            submitBtn.disabled = false;
+            submitBtn.textContent = isLogin ? 'ENTER STUDIO' : 'CREATE IDENTITY';
+          }
+        } catch (err) {
+          errorMsg.textContent = '[SYSTEM_ERROR]: CONNECTION INTERRUPTED';
+          submitBtn.disabled = false;
+          submitBtn.textContent = isLogin ? 'ENTER STUDIO' : 'CREATE IDENTITY';
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>
