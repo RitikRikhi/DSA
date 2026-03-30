@@ -7,7 +7,7 @@ const rateLimit = require("express-rate-limit");
 const path = require("path");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
-const Admin = require("./models/admin");
+const Admin = require("./models/Admin");
 
 const app = express();
 
