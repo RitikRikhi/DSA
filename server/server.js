@@ -11,9 +11,20 @@ const Admin = require("./models/admin");
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "img-src": ["'self'", "data:", "res.cloudinary.com"],
+      "media-src": ["'self'", "data:", "res.cloudinary.com"],
+    },
+  },
+}));
 // app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 1000 })); // Increased for development
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "*",
+  credentials: true
+}));
 app.use(express.json());
 
 // Debug: Log the resolved paths
@@ -82,7 +93,7 @@ app.get("/admin", (req, res) => {
 
 // Serve static files from client (but NOT admin - we have explicit routes)
 app.use(express.static(clientPath));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Local uploads serving removed - using Cloudinary instead
 
 // API routes
 app.use("/api/auth", require("./routes/authRoutes"));

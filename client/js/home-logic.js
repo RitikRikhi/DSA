@@ -100,7 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const galleryItem = document.createElement('div');
                 galleryItem.className = 'gallery-item';
 
-                const imageUrl = photo.imageUrl.startsWith('/') ? photo.imageUrl : '/' + photo.imageUrl;
+                const imageUrl = (photo.imageUrl.startsWith('/') || photo.imageUrl.startsWith('http')) 
+                    ? photo.imageUrl 
+                    : '/' + photo.imageUrl;
                 const cat = photo.category || 'Gallery';
                 const isVideo = photo.type === 'video' || imageUrl.match(/\.(mp4|webm|ogg|mov)$/i);
 

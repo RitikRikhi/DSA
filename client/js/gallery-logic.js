@@ -89,7 +89,9 @@ async function loadGalleryPhotos(category, page = 1) {
             const galleryItem = document.createElement('div');
             galleryItem.className = `gallery-item ${isReel ? 'vertical' : pattern.class}`;
             
-            const imageUrl = photo.imageUrl.startsWith('/') ? photo.imageUrl : '/' + photo.imageUrl;
+            const imageUrl = (photo.imageUrl.startsWith('/') || photo.imageUrl.startsWith('http')) 
+                ? photo.imageUrl 
+                : '/' + photo.imageUrl;
             const encodedUrl = encodeURI(imageUrl);
             const cat = photo.category || getCategoryFromTitle(photo.title) || 'Gallery';
             const isVideo = photo.type === 'video' || imageUrl.match(/\.(mp4|webm|ogg|mov)$/i);
@@ -140,7 +142,9 @@ async function loadGalleryPhotos(category, page = 1) {
             }
             
             galleryItem.addEventListener('click', (e) => {
-                const imageUrl = photo.imageUrl.startsWith('/') ? photo.imageUrl : '/' + photo.imageUrl;
+                const imageUrl = (photo.imageUrl.startsWith('/') || photo.imageUrl.startsWith('http')) 
+                    ? photo.imageUrl 
+                    : '/' + photo.imageUrl;
                 if (typeof openLightbox === 'function') { 
                     // Create a simple group for now, or just open the current one
                     openLightbox(imageUrl, photo.title, cat, isVideo ? 'video' : 'image'); 

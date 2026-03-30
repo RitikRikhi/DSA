@@ -5,27 +5,8 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const storage = multer.diskStorage({
-  destination: "./server/uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ 
-  storage,
-  fileFilter: (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif|mp4|webm|ogg|mov/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error("Error: Images and Videos Only!"));
-    }
-  }
-});
+const { cloudinary, storage } = require('../config/cloudinary');
+const upload = multer({ storage });
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -37,7 +18,8 @@ router.post("/", auth, upload.single("image"), catchAsync(async (req, res, next)
   const isVideo = req.file.mimetype.startsWith('video/');
   const photo = new Photo({
     title: req.body.title,
-    imageUrl: `/uploads/${req.file.filename}`,
+    imageUrl: req.file.path, // Cloudinary URL
+    publicId: req.file.filename, // Cloudinary public_id
     type: isVideo ? 'video' : 'image',
     category: req.body.category || ''
   });
@@ -80,10 +62,12 @@ router.delete("/:id", auth, catchAsync(async (req, res, next) => {
     return next(new AppError("Photo not found", 404));
   }
 
-  // Delete the file from filesystem
-  const filePath = path.join(__dirname, "..", "..", photo.imageUrl); // Fixed path
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
+  // Delete from Cloudinary if publicId exists
+  if (photo.publicId) {
+    const isVideo = photo.type === 'video';
+    await cloudinary.uploader.destroy(photo.publicId, { 
+      resource_type: isVideo ? 'video' : 'image' 
+    });
   }
 
   // Delete from database
