@@ -100,8 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('GALLERY: Attempting to load from /api/photos');
         try {
             const res = await fetch("/api/photos");
-            const photos = await res.json();
-            console.log('GALLERY: Received', photos.length, 'items');
+            const data = await res.json();
+            const photos = data.photos; // Fix: Access the photos array from the object
+            console.log('GALLERY: Received', (photos ? photos.length : 0), 'items');
 
             if (!photos || photos.length === 0) {
                 console.log('GALLERY: Empty state rendered because photo count is 0');

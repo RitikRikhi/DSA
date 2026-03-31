@@ -103,6 +103,17 @@ app.use("/api/photos", require("./routes/photoRoutes"));
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 
+// Health check route
+app.get("/api/health", (req, res) => {
+  const status = mongoose.connection.readyState === 1 ? "Connected" : "Disconnected";
+  res.json({
+    status,
+    database: "MongoDB",
+    connection_state: mongoose.connection.readyState,
+    timestamp: new Date()
+  });
+});
+
 // 404 Handler for undefined API routes
 app.use("/api", (req, res, next) => {
   const AppError = require("./utils/appError");
