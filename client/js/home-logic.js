@@ -113,9 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show last 12 items for home page
             const recentPhotos = photos.slice(-12).reverse();
 
-            recentPhotos.forEach((photo) => {
+            recentPhotos.forEach((photo, index) => {
                 const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
+                galleryItem.className = 'gallery-item visible'; // Force visibility
 
                 const imageUrl = (photo.imageUrl.startsWith('/') || photo.imageUrl.startsWith('http')) 
                     ? photo.imageUrl 
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 galleryItem.innerHTML = `
-                <div class="gallery-placeholder">
+                <div class="gallery-placeholder" style="position:relative; width:100%; height:100%;">
                     ${mediaElement}
                 </div>
                 <div class="gallery-overlay">
@@ -148,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
                 gallery.appendChild(galleryItem);
+                console.log('HOME GALLERY: Rendered item', index);
             });
         } catch (error) {
             console.error('GALLERY ERROR:', error);

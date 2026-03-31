@@ -98,9 +98,14 @@ router.post("/", catchAsync(async (req, res, next) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error("Error sending email:", error);
+        console.error("--- SMTP ERROR ---");
+        console.error("Code:", error.code);
+        console.error("Command:", error.command);
+        console.error("Full Error:", error);
       } else {
-        console.log("Email sent: " + info.response);
+        console.log("--- SMTP SUCCESS ---");
+        console.log("Accepted:", info.accepted);
+        console.log("Response:", info.response);
       }
     });
 
