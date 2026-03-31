@@ -1,5 +1,12 @@
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Start animations FIRST
+    if (typeof initAnimations === 'function') {
+        initAnimations();
+        console.log('ANIMATIONS: Intersection Observer initialized.');
+    }
+    if (typeof initStatsCounter === 'function') initStatsCounter();
+
     const urlParams = new URLSearchParams(window.location.search);
     const categoryQuery = urlParams.get('category') || 'all';
     
@@ -41,10 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
             loadGalleryPhotos(cat);
         });
     });
-
-    // Start animations
-    if (typeof initAnimations === 'function') initAnimations();
-    if (typeof initStatsCounter === 'function') initStatsCounter();
 });
 
 let currentPage = 1;
@@ -121,9 +124,13 @@ async function loadGalleryPhotos(category, page = 1) {
 
             galleryItem.innerHTML = `<div class="gallery-placeholder" style="position:relative; width:100%; height:100%;">${mediaElement}</div><div class="gallery-overlay"><div class="overlay-type">${cat}</div><div class="overlay-title">${photo.title || 'Untitled'}${verifiedHtml}</div></div>`;
             
-            // Add reveal class for animation
-            galleryItem.classList.add('reveal-item');
-            if (window.galleryObserver) window.galleryObserver.observe(galleryItem);
+            // Force visibility immediately to fix the "grey box" issue
+            galleryItem.classList.add('visible');
+            
+            if (window.galleryObserver) {
+                window.galleryObserver.observe(galleryItem);
+                console.log('GALLERY: Observing item', index);
+            }
             
             if (isVideo) {
                 const soundBtn = galleryItem.querySelector('.sound-toggle-btn');

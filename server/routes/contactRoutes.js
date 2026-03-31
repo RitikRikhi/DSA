@@ -129,4 +129,29 @@ router.post("/", catchAsync(async (req, res, next) => {
     res.status(201).json({ message: "Inquiry submitted successfully", inquiry: newInquiry });
 }));
 
+// Diagnostic endpoint for testing email configuration
+router.get("/test-email", catchAsync(async (req, res) => {
+  console.log("--- Manual Email Test Triggered ---");
+  const testMailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_USER,
+    subject: "DSA Media Crew: Email Transporter Diagnostic",
+    text: "If you receive this, your SMTP configuration (Gmail App Password) is working correctly on this server."
+  };
+
+  try {
+    const info = await transporter.sendMail(testMailOptions);
+    console.log("Diagnostic email sent:", info.response);
+    res.json({ status: "Success", details: info.response });
+  } catch (error) {
+    console.error("DIAGNOSTIC ERROR: Transporter failed:", error);
+    res.status(500).json({ 
+      status: "Failed", 
+      message: error.message,
+      code: error.code,
+      command: error.command
+    });
+  }
+}));
+
 module.exports = router;

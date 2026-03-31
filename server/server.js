@@ -96,6 +96,11 @@ app.use("/admin", express.static(adminPath));
 // Serve static files from client
 app.use(express.static(clientPath));
 // Local uploads serving removed - using Cloudinary instead
+if (process.env.NODE_ENV !== "production") {
+  app.use("/server/uploads", express.static(path.join(__dirname, "uploads")));
+  app.use("/server/videos", express.static(path.join(__dirname, "videos")));
+  console.log("DEV: Serving local uploads and videos.");
+}
 
 // API routes
 app.use("/api/auth", require("./routes/authRoutes"));
