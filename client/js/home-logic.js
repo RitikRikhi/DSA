@@ -1,5 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('--- DSA Media Crew Frontend Logic Loaded ---');
     // Stats animation observer
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -39,8 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle form submission
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
+        console.log('SUCCESS: Contact form #contactForm found in DOM.');
         contactForm.addEventListener('submit', async function(event) {
             event.preventDefault();
+            console.log('EVENT: Contact form submit triggered.');
             const form = event.target;
             const successMsg = document.getElementById('successMsg');
             
@@ -53,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
+                console.log('FETCH: Sending request to /api/contact with data:', data);
 
                 const response = await fetch('/api/contact', {
                     method: 'POST',
@@ -62,23 +66,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(data)
                 });
 
+                console.log('RESPONSE: Received from /api/contact:', response.status);
                 if (response.ok) {
+                    console.log('SUCCESS: Form submitted correctly.');
                     if (successMsg) successMsg.style.display = 'block';
                     form.reset();
                     setTimeout(() => {
                         if (successMsg) successMsg.style.display = 'none';
                     }, 3000);
                 } else {
+                    console.error('ERROR: Backend returned non-OK status:', response.status);
+                    const errorText = await response.text();
+                    console.error('Error body:', errorText);
                     alert('Failed to send message. Please try again.');
                 }
             } catch (error) {
-                console.error('Error submitting form:', error);
+                console.error('FETCH ERROR: Network or runtime error during submission:', error);
                 alert('An error occurred. Please try again later.');
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
             }
         });
+    } else {
+        console.warn('WARNING: Contact form #contactForm NOT found in DOM.');
     }
 
     // Dynamic Gallery loader for Home Page
@@ -86,11 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const gallery = document.getElementById('galleryGrid');
         if (!gallery) return;
 
+        console.log('GALLERY: Attempting to load from /api/photos');
         try {
             const res = await fetch("/api/photos");
             const photos = await res.json();
+            console.log('GALLERY: Received', photos.length, 'items');
 
-            if (!photos || photos.length === 0) return;
+            if (!photos || photos.length === 0) {
+                console.log('GALLERY: Empty state rendered because photo count is 0');
+                return;
+            }
 
             gallery.innerHTML = "";
             // Show last 12 items for home page
@@ -133,9 +149,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 gallery.appendChild(galleryItem);
             });
         } catch (error) {
-            console.error('Error loading gallery:', error);
+            console.error('GALLERY ERROR:', error);
         }
     }
 
     loadDynamicGallery();
 });
+

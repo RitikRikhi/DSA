@@ -91,7 +91,9 @@ app.get("/admin", (req, res) => {
   });
 });
 
-// Serve static files from client (but NOT admin - we have explicit routes)
+// Serve static files from admin
+app.use("/admin", express.static(adminPath));
+// Serve static files from client
 app.use(express.static(clientPath));
 // Local uploads serving removed - using Cloudinary instead
 

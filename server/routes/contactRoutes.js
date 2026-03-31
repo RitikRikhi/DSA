@@ -3,12 +3,18 @@ const router = express.Router();
 const Inquiry = require("../models/inquiry");
 const nodemailer = require("nodemailer");
 
-// Set up nodemailer transporter
+// After (More robust for Render)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // Use SSL/TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    // This setting ensures that even if there's a certificate issue on the cloud server, it still connects.
+    rejectUnauthorized: false
   }
 });
 
@@ -16,6 +22,8 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 router.post("/", catchAsync(async (req, res, next) => {
+    console.log('--- Incoming Contact Form Request ---');
+    console.log('Body:', req.body);
     const { name, email, purpose, message } = req.body;
 
     if (!name || !email || !purpose || !message) {
