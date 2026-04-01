@@ -97,22 +97,13 @@ function initServiceCards() {
   
   serviceCards.forEach(card => {
     card.addEventListener('click', () => {
-      // Get the category from the service card
-      const icon = card.querySelector('.service-icon').textContent;
-      const categoryMap = {
-        '📸': 'photography',
-        '🎬': 'videography',
-        '🎨': 'editing',
-        '🎤': 'team-bts',
-        '🏆': 'achievements',
-        '📱': 'reels',
-        '🗂️': 'archives'
-      };
+      // Use data-category attribute
+      const category = card.getAttribute('data-category');
       
-      const category = categoryMap[icon] || 'all';
-      
-      // Navigate to gallery with category filter
-      window.location.href = `/gallery.html?category=${category}`;
+      if (category) {
+        // Navigate to gallery with category filter
+        window.location.href = `/gallery.html?category=${category}`;
+      }
     });
   });
 }
@@ -181,15 +172,16 @@ function initTeamCards() {
     card.addEventListener('click', () => {
       const name = card.querySelector('.team-name').textContent;
       const role = card.querySelector('.team-role').textContent;
+      const bio = card.getAttribute('data-bio'); // Get dynamic bio
       
       // Show team member details in a modal
-      showTeamMemberModal(name, role);
+      showTeamMemberModal(name, role, bio);
     });
   });
 }
 
 // Team member modal
-function showTeamMemberModal(name, role) {
+function showTeamMemberModal(name, role, bio) {
   // Remove existing modal if any
   const existing = document.getElementById('teamModal');
   if (existing) existing.remove();
@@ -197,22 +189,25 @@ function showTeamMemberModal(name, role) {
   const modal = document.createElement('div');
   modal.id = 'teamModal';
   modal.className = 'lightbox';
+  
+  // Default bio if none provided
+  const displayBio = bio || "Passionate about capturing moments and telling visual stories. Part of the DSA Media Crew family.";
+  
   modal.innerHTML = `
     <div class="lightbox-overlay" onclick="this.parentElement.remove()"></div>
-    <div class="lightbox-content" style="max-width:500px;background:var(--grey);padding:3rem;border-radius:8px;text-align:center;">
+    <div class="lightbox-content" style="max-width:500px;background:var(--grey);padding:3rem;border-radius:8px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);">
       <button class="lightbox-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
-      <div class="team-avatar" style="width:120px;height:120px;font-size:3rem;margin:0 auto 1.5rem;">
+      <div class="team-avatar" style="width:120px;height:120px;font-size:3rem;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;background:var(--red);color:white;border-radius:50%;">
         ${name.charAt(0)}
       </div>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;margin-bottom:0.5rem;">${name}</h2>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;margin-bottom:0.5rem;color:white;">${name}</h2>
       <p style="color:var(--gold);font-size:0.9rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;">${role}</p>
-      <p style="color:rgba(245,240,235,0.6);line-height:1.8;">
-        Passionate about capturing moments and telling visual stories. 
-        Part of the DSA Media Crew family.
+      <p style="color:rgba(245,240,235,0.8);line-height:1.8;font-size:1.1rem;">
+        ${displayBio}
       </p>
       <div style="display:flex;gap:1rem;justify-content:center;margin-top:2rem;">
         <a href="#contact" class="social-btn" onclick="document.getElementById('teamModal').remove()">Contact</a>
-        <a href="#gallery" class="social-btn primary" onclick="document.getElementById('teamModal').remove()">View Work</a>
+        <a href="gallery.html" class="social-btn primary" onclick="document.getElementById('teamModal').remove()">View Work</a>
       </div>
     </div>
   `;
