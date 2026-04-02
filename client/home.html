@@ -110,7 +110,7 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('img/team-photo.png');
+      background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://res.cloudinary.com/dyflxz9yl/image/upload/v1743568412/dsa_media/site_assets/team_photo_2026.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -152,12 +152,11 @@
     }
 
     .hero-title .outline {
-      -webkit-text-stroke: 1px rgba(245, 240, 235, 0.3);
-      color: transparent;
+      color: var(--red);
     }
 
     .hero-title .accent {
-      color: var(--red);
+      color: var(--white);
     }
 
     .hero-sub {
@@ -362,12 +361,12 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.4)),
-        linear-gradient(135deg, rgba(200, 16, 46, 0.2) 0%, transparent 50%);
+        linear-gradient(rgba(10, 10, 10, 0.1), rgba(10, 10, 10, 0.2)),
+        linear-gradient(135deg, rgba(200, 16, 46, 0.1) 0%, transparent 40%);
       display: flex;
       align-items: center;
       justify-content: center;
-      backdrop-filter: saturate(1.2) blur(1px);
+      backdrop-filter: saturate(1.1);
     }
 
     .about-visual-text {
@@ -1466,15 +1465,15 @@
   <!-- STATS -->
   <div class="stats">
     <div class="stat">
-      <div class="stat-num" id="stat1" data-target="120">0</div>
+      <div class="stat-num" id="stat1" data-target="200" data-suffix="+">0</div>
       <div class="stat-label">Events Covered</div>
     </div>
     <div class="stat">
-      <div class="stat-num" id="stat2" data-target="50000">0</div>
+      <div class="stat-num" id="stat2" data-target="1" data-suffix=" Lakh+">0</div>
       <div class="stat-label">Frames Shot</div>
     </div>
     <div class="stat">
-      <div class="stat-num" id="stat3" data-target="45">0</div>
+      <div class="stat-num" id="stat3" data-target="30">0</div>
       <div class="stat-label">Active Members</div>
     </div>
   </div>
@@ -1502,7 +1501,7 @@
         </div>
       </div>
       <div class="about-visual">
-        <img src="img/team-photo.png" alt="DSA Media Crew Team">
+        <img src="https://res.cloudinary.com/dyflxz9yl/image/upload/v1743513251/dsa_media/site_assets/team_photo_2026.jpg" alt="DSA Media Crew Team">
         <div class="about-visual-inner">
           <div class="about-visual-text">FRAME<br>EVERY<br>MOMENT</div>
         </div>

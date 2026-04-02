@@ -302,6 +302,7 @@ function animateStats() {
   
   stats.forEach(stat => {
     const target = parseInt(stat.getAttribute('data-target'));
+    const suffix = stat.getAttribute('data-suffix') || '';
     const duration = 2000;
     const step = target / (duration / 16);
     let current = 0;
@@ -312,7 +313,9 @@ function animateStats() {
         current = target;
         clearInterval(timer);
       }
-      stat.textContent = Math.floor(current).toLocaleString();
+      
+      let displayValue = Math.floor(current).toLocaleString();
+      stat.textContent = displayValue + suffix;
     }, 16);
   });
 }

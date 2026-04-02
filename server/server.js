@@ -22,7 +22,12 @@ app.use(helmet({
 }));
 // app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 1000 })); // Increased for development
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "*",
+  origin: process.env.FRONTEND_URL || [
+    "https://dsa-media-crew.vercel.app", 
+    "https://dsa-media-crew-git-main.vercel.app",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500"
+  ],
   credentials: true
 }));
 app.use(express.json());
