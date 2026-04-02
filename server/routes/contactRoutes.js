@@ -23,6 +23,7 @@ const AppError = require("../utils/appError");
 
 router.post("/", catchAsync(async (req, res, next) => {
     console.log('--- Incoming Contact Form Request ---');
+    console.log('Origin:', req.headers.origin);
     console.log('Body:', req.body);
     const { name, email, purpose, message } = req.body;
 
