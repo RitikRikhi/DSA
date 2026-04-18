@@ -397,6 +397,49 @@
                 left: 2rem;
             }
         }
+    /* DROPDOWN */
+    .nav-item-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: rgba(10, 10, 10, 0.95);
+      min-width: 160px;
+      padding: 0.5rem 0;
+      border: 1px solid rgba(184, 160, 106, 0.15);
+      backdrop-filter: blur(8px);
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 100;
+    }
+
+    .nav-item-dropdown:hover .dropdown-content {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dropdown-content a {
+      color: rgba(245, 240, 235, 0.6);
+      padding: 12px 20px;
+      text-decoration: none;
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background-color: rgba(184, 160, 106, 0.1);
+      color: var(--gold);
+    }
     </style>
 </head>
 
@@ -411,6 +454,12 @@
             <li><a href="gallery.html">Photography</a></li>
             <li><a href="videography-aftermovies.html">Videography</a></li>
             <li><a href="editing-designs.html" style="color:var(--gold)">Editing & Designs</a></li>
+            <li class="nav-item-dropdown">
+                <a style="cursor: pointer; display: flex; align-items: center; gap: 4px;">Events <span style="font-size: 0.6rem;">▼</span></a>
+                <div class="dropdown-content">
+                    <a href="meraki26.html">Meraki 26</a>
+                </div>
+            </li>
             <li><a href="home.html#contact">Contact</a></li>
         </ul>
         <span class="nav-tag">Premium Media · Est. 2020</span>
