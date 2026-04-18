@@ -155,6 +155,12 @@
       object-position: center;
       z-index: 0;
       filter: grayscale(10%) contrast(1.05);
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+
+    .hero-video.loaded {
+      opacity: 1;
     }
 
     .hero-overlay {
@@ -487,6 +493,22 @@
       <a href="editing-designs.html">Editing & Designs</a>
     </div>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.querySelector('.hero-video');
+      if (video) {
+        video.addEventListener('playing', () => {
+          video.classList.add('loaded');
+        });
+        
+        // Fallback for already playing or cached videos
+        if (video.readyState >= 3) {
+          video.classList.add('loaded');
+        }
+      }
+    });
+  </script>
 
 </body>
 
