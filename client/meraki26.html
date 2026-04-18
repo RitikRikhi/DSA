@@ -147,20 +147,22 @@
     }
 
     .hero-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      z-index: 0;
-      filter: grayscale(10%) contrast(1.05);
-      opacity: 0;
-      transition: opacity 1.5s ease;
+      display: none;
     }
 
-    .hero-video.loaded {
-      opacity: 1;
+    .hero-background-img {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://res.cloudinary.com/dyflxz9yl/image/upload/f_auto,q_auto/v1776490389/dsa_media/meraki/meraki_hero_2026.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+      animation: hero-zoom 20s infinite alternate;
+    }
+
+    @keyframes hero-zoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
     }
 
     .hero-overlay {
@@ -223,6 +225,61 @@
       margin-top: 2rem;
       max-width: 600px;
       text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .cta-container {
+      margin-top: 3.5rem;
+      display: flex;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    .cta-btn {
+      padding: 1.2rem 2.5rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid transparent;
+    }
+
+    .cta-btn.primary {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .cta-btn.secondary {
+      background: rgba(245, 240, 235, 0.05);
+      color: var(--white);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(245, 240, 235, 0.2);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+
+    .cta-btn.primary:hover {
+      background: #e61033;
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .cta-btn.secondary:hover {
+      background: rgba(245, 240, 235, 0.15);
+      border-color: var(--gold);
+    }
+
+    .cta-btn svg {
+      width: 18px;
+      fill: currentColor;
     }
 
     /* TICKER */
@@ -445,9 +502,7 @@
   </nav>
 
   <section class="hero">
-    <video autoplay loop muted playsinline preload="metadata" poster="img/events/meraki_hero.png" class="hero-video">
-      <source src="videos/meraki/rajan_meraki_1.mp4" type="video/mp4">
-    </video>
+    <div class="hero-background-img"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-eyebrow">The Ultimate Fashion Experience</div>
@@ -456,6 +511,16 @@
         <span class="accent">26</span>
       </h1>
       <p class="hero-sub">Where glamour meets the runway. Witness the pinnacle of fashion, modeling, and design under the blinding lights.</p>
+      
+      <div class="cta-container">
+        <a href="gallery.html?category=events" class="cta-btn primary">
+          View Gallery
+        </a>
+        <a href="videos/meraki/rajan_meraki_1.mp4" target="_blank" class="cta-btn secondary">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> 
+          Watch Aftermovie
+        </a>
+      </div>
     </div>
   </section>
 
