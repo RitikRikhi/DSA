@@ -147,22 +147,20 @@
     }
 
     .hero-video {
-      display: none;
-    }
-
-    .hero-background-img {
       position: absolute;
       inset: 0;
-      background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://res.cloudinary.com/dyflxz9yl/image/upload/f_auto,q_auto/v1776490389/dsa_media/meraki/meraki_hero_2026.jpg');
-      background-size: cover;
-      background-position: center;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       z-index: 0;
-      animation: hero-zoom 20s infinite alternate;
+      filter: grayscale(10%) contrast(1.05);
+      opacity: 0;
+      transition: opacity 1.5s ease;
     }
 
-    @keyframes hero-zoom {
-      from { transform: scale(1); }
-      to { transform: scale(1.1); }
+    .hero-video.loaded {
+      opacity: 1;
     }
 
     .hero-overlay {
@@ -502,7 +500,9 @@
   </nav>
 
   <section class="hero">
-    <div class="hero-background-img"></div>
+    <video autoplay loop muted playsinline preload="auto" poster="img/events/meraki_hero.png" class="hero-video">
+      <source src="https://res.cloudinary.com/dyflxz9yl/video/upload/f_auto,q_auto/v1776491011/dsa_media/meraki/dsa_media/meraki/meraki_optimized_bg.mp4" type="video/mp4">
+    </video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-eyebrow">The Ultimate Fashion Experience</div>
@@ -516,7 +516,7 @@
         <a href="gallery.html?category=events" class="cta-btn primary">
           View Gallery
         </a>
-        <a href="videos/meraki/rajan_meraki_1.mp4" target="_blank" class="cta-btn secondary">
+        <a href="https://res.cloudinary.com/dyflxz9yl/video/upload/v1776491011/dsa_media/meraki/dsa_media/meraki/meraki_optimized_bg.mp4" target="_blank" class="cta-btn secondary">
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> 
           Watch Aftermovie
         </a>
