@@ -1,4 +1,11 @@
 
+// Cloudinary optimization utility
+function optimizeCloudinaryUrl(url) {
+    if (!url || !url.includes('res.cloudinary.com')) return url;
+    if (url.includes('f_auto,q_auto')) return url;
+    return url.replace('/upload/', '/upload/f_auto,q_auto/');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     // Start animations FIRST
     if (typeof initAnimations === 'function') {
@@ -95,11 +102,12 @@ async function loadGalleryPhotos(category, page = 1) {
             const imageUrl = (photo.imageUrl.startsWith('/') || photo.imageUrl.startsWith('http')) 
                 ? photo.imageUrl 
                 : '/' + photo.imageUrl;
-            const encodedUrl = encodeURI(imageUrl);
+            const optimizedUrl = optimizeCloudinaryUrl(imageUrl);
+            const encodedUrl = encodeURI(optimizedUrl);
             const cat = photo.category || getCategoryFromTitle(photo.title) || 'Gallery';
             const isVideo = photo.type === 'video' || imageUrl.match(/\.(mp4|webm|ogg|mov)$/i);
             
-            let mediaElement = `<img src="${encodedUrl}" alt="${photo.title}" onerror="this.parentElement.innerHTML='<div class=\\'gallery-icon\\'>📷</div><div class=\\'gallery-label\\'>Image not found</div>'">`;
+            let mediaElement = `<img src="${encodedUrl}" alt="${photo.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'gallery-icon\\'>📷</div><div class=\\'gallery-label\\'>Image not found</div>'">`;
             
             if (isVideo) {
                 const isRotated = photo.rotation && photo.rotation % 180 !== 0;

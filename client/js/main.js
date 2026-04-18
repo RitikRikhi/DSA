@@ -5,6 +5,15 @@
 // Category filter functionality
 let currentCategory = 'all';
 
+// Cloudinary optimization utility
+function optimizeCloudinaryUrl(url) {
+  if (!url || !url.includes('res.cloudinary.com')) return url;
+  if (url.includes('f_auto,q_auto')) return url;
+  
+  // Inject optimization flags after '/upload/'
+  return url.replace('/upload/', '/upload/f_auto,q_auto/');
+}
+
 async function loadPhotos(category = 'all') {
   const gallery = document.getElementById('galleryGrid');
   if (!gallery) return;
@@ -36,8 +45,9 @@ async function loadPhotos(category = 'all') {
       
       const categoryLabel = photo.category || 'Gallery';
       
+      const optimizedUrl = optimizeCloudinaryUrl(photo.imageUrl);
       item.innerHTML = `
-        <img src="${photo.imageUrl}" alt="${photo.title}">
+        <img src="${optimizedUrl}" alt="${photo.title}" loading="lazy">
         <div class="gallery-overlay">
           <div style="width: 100%;">
             <div style="font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">${categoryLabel}</div>
@@ -48,7 +58,8 @@ async function loadPhotos(category = 'all') {
       
       item.addEventListener('click', () => {
         if (typeof openLightbox === 'function') {
-          openLightbox(photo.imageUrl, photo.title, categoryLabel);
+          const optimizedUrl = optimizeCloudinaryUrl(photo.imageUrl);
+          openLightbox(optimizedUrl, photo.title, categoryLabel);
         }
       });
       

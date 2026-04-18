@@ -1,4 +1,11 @@
 
+// Cloudinary optimization utility
+function optimizeCloudinaryUrl(url) {
+    if (!url || !url.includes('res.cloudinary.com')) return url;
+    if (url.includes('f_auto,q_auto')) return url;
+    return url.replace('/upload/', '/upload/f_auto,q_auto/');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
     const itemsLimit = 6;
@@ -52,11 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isRotated = video.rotation && video.rotation % 180 !== 0;
                 const transform = `rotate(${video.rotation || 0}deg)${isRotated ? ' scale(3.16)' : ''}`;
 
+                const optimizedUrl = optimizeCloudinaryUrl(video.imageUrl);
                 videoItem.innerHTML = `
                     <div class="video-placeholder" style="width:100%;height:100%; position: relative; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center;">
                         ${isVideo ? 
-                            `<video src="${video.imageUrl}${timestamp}" class="video-thumbnail" muted playsinline preload="metadata" style="width:100%; height:100%; object-fit: ${isRotated ? 'contain' : 'cover'}; transform: ${transform}; position: absolute;"></video>` : 
-                            `<img src="${video.imageUrl}" alt="${video.title}" class="video-thumbnail" style="width:100%; height:100% ;object-fit: cover; transform: rotate(${video.rotation || 0}deg);">`
+                            `<video src="${optimizedUrl}${timestamp}" class="video-thumbnail" muted playsinline preload="metadata" style="width:100%; height:100%; object-fit: ${isRotated ? 'contain' : 'cover'}; transform: ${transform}; position: absolute;"></video>` : 
+                            `<img src="${optimizedUrl}" alt="${video.title}" class="video-thumbnail" loading="lazy" style="width:100%; height:100% ;object-fit: cover; transform: rotate(${video.rotation || 0}deg);">`
                         }
                     </div>
                     <div class="video-play-btn">
