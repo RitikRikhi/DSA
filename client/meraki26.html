@@ -563,10 +563,17 @@
     document.addEventListener('DOMContentLoaded', () => {
       const video = document.querySelector('.hero-video');
       if (video) {
+        // Ensure loop is active
+        video.loop = true;
+
         video.addEventListener('playing', () => {
           video.classList.add('loaded');
         });
         
+        video.addEventListener('ended', () => {
+          video.play();
+        });
+
         // Fallback for already playing or cached videos
         if (video.readyState >= 3) {
           video.classList.add('loaded');
